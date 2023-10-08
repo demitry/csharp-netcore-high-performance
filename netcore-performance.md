@@ -73,6 +73,17 @@ Self contained win10-x64 - 96 Mb
 vs.
 Shared Framework - 2 Mb
 
+##### .NET Core Application Types
+
+* 1: Web Application - ASP.NET Core - run Kestrel
+* 2: Console Application
++ 1: UWP (also run on Core CLR)
+
+##### Summary
+
+- Great for cloud
+- Performance: 1,7 mio resp/sec.
+- NET Standard, deployment models, versions
 
 ### Measuring CPU [5]
 ### Measuring Memory [6]
