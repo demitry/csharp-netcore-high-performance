@@ -86,6 +86,52 @@ Shared Framework - 2 Mb
 - NET Standard, deployment models, versions
 
 ### Measuring CPU [5]
+
+**Advice N 1: Always Measure**
+
+- Numbers, performance tests, simply measure
+- Collect Numbers
+
+- Sampling Profilers 
+- Inclusive vs. Exclusive samples
+- Instrumentation Profilers
+
+- CPU Utilization: The % of time when the CPU does work
+- Wall clock time: simply the time that an operation takes on one specific hardware 
+
+- Typical question: in which method do we spend a long time? 
+
+Types of Profilers
+- Sampling
+- Instrumentation
+
+#### Sampling Profilers
+- Huge number of snapshots with callstacks -> aggregates this data
+- Can be done on a running process without restart
+- Minimal overhead
+- Non CPU work is not visible! (e.g.: Thread.Sleep(…), I/O Operation)
+
+#### Instrumentation Profiler
+
+- Injects code to measure methods
+- Measures also non CPU work
+- Can potentially have more overhead
+- No attach/detach 
+
+```cs
+public void MyMethod()
+{
+    MethodStart(nameof(MyMethod)); //*
+    //Further instructions
+    MethodCallStart(nameof(CallAnotherMethod)); //*
+    CallAnotherMethod();
+    MethodCallFinished(nameof(CallAnotherMethod)); //*
+    //Further instructions
+    MethodEnd(nameof(MyMethod)); //*
+}
+//* Injected Profiler Code
+```
+
 ### Measuring Memory [6]
 ### Visual Studio Performance Tools - PerfTips and Profiler [7]
 ### Visual Studio Performance Tools – The Diagnostic Tools Window [8]
