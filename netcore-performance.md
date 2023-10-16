@@ -133,6 +133,97 @@ public void MyMethod()
 ```
 
 ### Measuring Memory [6]
+
+C++ new/delete manual management = source of errors (memory leaks)
+
+C# - no need? - GC delete
+
+This GC work = is time
+
+No GC root referencing it.
+
+Can ref obj directly or indirectly (List for ex.)
+
+Measuring Memory 2 Questions:
+- In what method we allocate?
+- Which GC root holds the ref?
+
+Visual Studio Memory Profiler
+- 3 lists:
+  - Functions Allocated Most Memory
+  - Types With Most Memory Allocated
+  - Types With Most Instances
+- Call Stack
+
+First lesson - use StringBuilder
+
+Which GC root holds the ref?
+- We have to search for GC roots
+- Allocation Stack does not help
+
+PerfView - shows allocated objs with GC root paths
+
+```cs
+public static void StringProcessingMethod()
+{
+    String str = "";         
+    for (int i = 0; i < 10; i++)
+    {
+        str += “SampleString1";
+        str += “SampleString2";
+        str += “SampleString3";
+        str += “SampleString4";
+        str += “SampleString5";
+    }
+    //Do something with str
+}
+
+```
+
+```cs
+class Program
+{
+    public static List<Person> People = new List<Person>();
+
+    static void Main(string[] args)
+    {
+        for (int i = 0; i < 1000000; i++)
+        {
+            CreatePerson();
+        }
+        Console.ReadKey();
+    }
+
+    public static void CreatePerson()
+    {
+        People.Add(new Person { Name = "Test Person", Age = 34 });
+    }
+}
+
+```
+#### GC Settings in .NET Core – Same as Full Framework
+
+As a dev. we “control” the GC by 2 things:
+- 1: Don’t allocate too much
+- 2: Don’t have GC roots to objects that we don’t need
+
+GC settings can be changed in the .csproj file:
+```xml
+<PropertyGroup>
+  <ServerGarbageCollection>true</ServerGarbageCollection>
+  <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>   
+</PropertyGroup>
+```
+- Concurrent GC: application threads can run (almost completely) parallel with the GC 
+
+- Server GC: Dedicated GC threads
+
+#### What about GC performance counters? 
+
+- Performance counters is a Windows-Concept (desktop)
+- .NET Core is cross platform 
+- No Performance Counters on .NET Core
+
 ### Visual Studio Performance Tools - PerfTips and Profiler [7]
 ### Visual Studio Performance Tools – The Diagnostic Tools Window [8]
 ### Event Tracing: ETW and PerfView [9]
